@@ -1,0 +1,39 @@
+.img-details{
+    margin-top: 2%;
+    width:  90%;
+    height: auto;
+}
+.country-details{
+    color: white;
+    font-size: 40px;
+}
+.flex{
+    display: flex;
+    justify-content: space-between;
+}
+.details-container{
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    width: 40%;
+}
+.details-container
+{
+    margin: 2%;
+    color: white;
+    font-size: 20px;
+}
+.img-details2{
+    width:  90%;
+    height: auto;
+}
+.details-container-gerb{
+    margin-top: 2%;
+    width: 20%;
+}
+.about{
+    margin: 1%;
+}
+.region-details{
+    color: aqua;
+}

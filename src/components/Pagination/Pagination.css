@@ -1,0 +1,37 @@
+.page-item.active .page-link {
+  background-color: rgb(5, 145, 40);
+  border-radius: 100px;
+}
+.page-item.disabled .page-link {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
+}
+.pagination{
+    display: flex;
+    width: 50%;
+}
+.pagination1{
+    width: 100%;
+    display: flex;
+    justify-content: center
+}
+.page-link1{
+    background-color: red;
+    color: white;
+
+}
+.page-link2{
+    background-color: green;
+    color: white;
+}
+.rozmir{
+    width: 100px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+.page-item{
+    color: white;
+}

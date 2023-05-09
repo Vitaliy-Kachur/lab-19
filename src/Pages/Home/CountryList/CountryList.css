@@ -1,0 +1,51 @@
+.country {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+.country-list {
+  width: 35%;
+}
+.country-list2 {
+  width: 40%;
+}
+.search-container {
+  display: flex;
+  justify-content: center;
+}
+
+.country-info {
+  margin-right: 5px;
+  color: white;
+}
+.country-item {
+  border: 1px solid rgb(255, 255, 255);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 55px;
+  width: 100%;
+}
+.item-left {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 30%;
+  margin-left: 2%;
+}
+.item-left img {
+  width: 55px;
+  height: 45px;
+  margin-right: 2%;
+}
+.coat-of-arms {
+  width: 50%;
+  height: auto;
+}
+.index {
+  color: white;
+}
+.white {
+  color: white;
+}
