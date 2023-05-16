@@ -6,3 +6,14 @@
 .page-item{
     margin-left: 20px;
 }
+.conteinerSort{
+    margin-top: 2%;
+    width: 60%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+.button{
+   height: 20px;
+}

@@ -6,6 +6,7 @@ import AboutCountry from "../Pages/AboutCountry"
 import CountryDetails from "../Pages/AboutCountry";
 
 function APPRouter() {
+  sessionStorage.setItem("currentPage",1)
   return (
     <Routes>
       <Route path="/home" element={<Home />} />
