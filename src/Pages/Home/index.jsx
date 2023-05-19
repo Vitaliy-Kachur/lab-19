@@ -5,17 +5,26 @@ import { useEffect, useState } from "react";
 import CountryList from "./CountryList";
 import Pagination from "../../components/Pagination";
 import SearchBar from "../../components/SearchBar";
-function Home() {
+import { slide as Menu } from "react-burger-menu";
 
+function Home() {
   const [allCountry, setAllCountry] = useState([]);
-  const [filterlCountry, setFilterCountry] = useState([]);
-  const [currentPage, setCurrentPage] = useState(Number(sessionStorage.getItem("currentPage")));
+  const [currentPage, setCurrentPage] = useState(
+    Number(sessionStorage.getItem("currentPage")) || 1
+  );
   const [countItems, setCountItems] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
+  const [Save, getSave] = useState([]);
+  const [selectedSubregion, setSelectedSubregion] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [filteredRegions, setFilteredRegions] = useState([]);
 
-  const [isAscendingSort, setIsAscendingSort] = useState(true);
-
-  const [isAscendingSortById, setIsAscendingSortById] = useState(true);
+  const [isAscendingSort, setIsAscendingSort] = useState(
+    sessionStorage.getItem("isAscendingSort") === "true" || true
+  );
+  const [isAscendingSortById, setIsAscendingSortById] = useState(
+    sessionStorage.getItem("isAscendingSortById") === "true" || true
+  );
 
   const regions = allCountry.reduce((acc, country) => {
     const { continents, subregion } = country;
@@ -29,25 +38,33 @@ function Home() {
 
   const lastCountryIndex = currentPage * countItems;
   const firstCountryIndex = lastCountryIndex - countItems;
-  const currentCountry = (filterlCountry.length===0? allCountry:filterlCountry)
-    .filter((country) =>
-      country.name.common.toLowerCase().includes(searchTerm.toLowerCase())
+  const currentCountry = allCountry
+    .filter(
+      (country) =>
+        country.name.common.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (selectedRegion === "" ||
+          country.continents.includes(selectedRegion)) &&
+        (selectedSubregion === "" ||
+          country.subregion.includes(selectedSubregion))
     )
     .slice(firstCountryIndex, lastCountryIndex);
 
-  const totalItems = allCountry.filter((country) =>
-    country.name.common.toLowerCase().includes(searchTerm.toLowerCase())
-  ).length;
+  const totalItems = allCountry
+    .filter((country) =>
+      country.name.common.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter(
+      (country) =>
+        selectedRegion === "" || country.continents.includes(selectedRegion)
+    )
+    .filter(
+      (country) =>
+        selectedSubregion === "" ||
+        country.subregion.includes(selectedSubregion)
+    ).length;
   const paginate = (pageNumber) => {
     sessionStorage.setItem("currentPage", pageNumber);
     setCurrentPage(pageNumber);
-    // const urlParams = new URLSearchParams(window.location.search);
-    // urlParams.set("page", pageNumber);
-    // window.history.pushState(
-    //   {},
-    //   "",
-    //   `${window.location.pathname}?${urlParams}`
-    // );
   };
 
   const sortAlphabetically = () => {
@@ -63,9 +80,9 @@ function Home() {
     setAllCountry(sorted);
     setIsAscendingSort(!isAscendingSort);
     setCurrentPage(1);
-    localStorage.setItem("isAscendingSort", !isAscendingSort);
-    localStorage.setItem("allCountry", JSON.stringify(sorted));
+    sessionStorage.setItem("isAscendingSort", !isAscendingSort);
   };
+
   const sortById = () => {
     const sorted = [...allCountry].sort((a, b) => {
       if (isAscendingSortById) {
@@ -77,95 +94,116 @@ function Home() {
     setAllCountry(sorted);
     setIsAscendingSortById(!isAscendingSortById);
     setCurrentPage(1);
-    localStorage.setItem("isAscendingSortById", !isAscendingSortById);
-    localStorage.setItem("allCountry", JSON.stringify(sorted));
+    sessionStorage.setItem("isAscendingSortById", !isAscendingSortById);
   };
+
+  const sortContinent = (continent) => {
+    setSelectedRegion(continent);
+    setSelectedSubregion("");
+    if (continent === "") {
+      setFilteredRegions(Object.keys(regions));
+    } else {
+      setFilteredRegions(Array.from(regions[continent]));
+    }
+    setCurrentPage(1);
+  };
+
+  const sortSubregion = (subregion) => {
+    setSelectedSubregion(subregion);
+    setCurrentPage(1);
+  };
+
   const resetSort = async () => {
     try {
-      const result = await axios.get("https://restcountries.com/v3.1/all");
-      const resultAddId = result.data.map((item, i) => {
-        return { ...item, id: i + 1 };
+      const result = await axios("https://restcountries.com/v3.1/all");
+      const resultAddId = result.data.map((item, ind) => {
+        return { ...item, id: ind + 1 };
       });
       setAllCountry(resultAddId);
-    } catch (error) {
-      setAllCountry([]);
+      setIsAscendingSort(true);
+      setIsAscendingSortById(true);
+      setSelectedRegion("");
+      setSelectedSubregion("");
+      setSelectedSubregion("");
+      setCurrentPage(1);
+    } catch {
+      setAllCountry("Error");
     }
-    setIsAscendingSort(true);
-    setIsAscendingSortById(true);
-    setCurrentPage(1);
-    localStorage.removeItem("isAscendingSort");
-    localStorage.removeItem("isAscendingSortById");
   };
-  const sortContinent = (continent) => {
-    const sorted = [allCountry].filter(
-      (country)=>String(country.continents) === String(continent)
-    )
-    setAllCountry(sorted)
-  };
-
 
   useEffect(() => {
-    const storedCountry = JSON.parse(localStorage.getItem("allCountry"));
-    if (storedCountry) {
-      setAllCountry(storedCountry);
-    } else {
-      const fetchCountries = async () => {
-        try {
-          const result = await axios.get("https://restcountries.com/v3.1/all");
-          const resultAddId = result.data.map((item, i) => {
-            return { ...item, id: i + 1 };
-          });
-          setAllCountry(resultAddId);
-        } catch (error) {
-          console.log("Error fetching countries:", error);
-          setAllCountry([]);
-        }
-      };
-      fetchCountries();
-    }
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = parseInt(urlParams.get("page")) || 1;
-    setCurrentPage(page);
-    localStorage.setItem("currentPage", page);
-    const storedSort = localStorage.getItem("isAscendingSort");
-    if (storedSort) {
-      setIsAscendingSort(JSON.parse(storedSort));
-    }
-    const storedSortById = localStorage.getItem("isAscendingSortById");
-    if (storedSortById) {
-      setIsAscendingSortById(JSON.parse(storedSortById));
-    }
-    if (searchTerm) {
-      setCurrentPage(1);
-      localStorage.setItem("currentPage", 1);
-    }
-  }, [searchTerm]);
+    const fetchData = async () => {
+      try {
+        const result = await axios("https://restcountries.com/v3.1/all");
+        const resultAddId = result.data.map((item, ind) => {
+          return { ...item, id: ind + 1 };
+        });
+        setAllCountry(resultAddId);
+        setFilteredRegions(Object.keys(regions));
+      } catch {
+        setAllCountry("Error");
+        setFilteredRegions([]);
+      }
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    sessionStorage.setItem("currentPage", currentPage);
+  }, [currentPage]);
 
   if (allCountry.length === 0) return <div>Loading....</div>;
   return (
     <>
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <div className="conteinerSort">
-        <button className="button" onClick={sortAlphabetically}>
-          Sort A-Ua{" "}
+      <div className="blok">
+        <button className="button burger2" onClick={sortAlphabetically}>
+          Sort A-Ua
         </button>
-        <button className="button" onClick={sortById}>
+        <button className="button burger2" onClick={sortById}>
           Sort ID
         </button>
-        {
-          Object.keys(regions).map((item)=>(
-            <button className="button" onClick={sortContinent(item)}>
-            {item}
-          </button>
-
-          ))
-          
-        }
-        <button className="button" onClick={resetSort}>
+        <button className="button burger2" onClick={resetSort}>
           Reset sort
         </button>
+        <div className="start">
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        </div>
       </div>
-      <CountryList allCountry={currentCountry}></CountryList>
+      <div className="blok2">
+        <div className="rozmir-blok">
+          <CountryList allCountry={currentCountry}></CountryList>
+        </div>
+        <div className="vidobrazutu">
+          <div className="top">
+            {Object.keys(regions).map((item) => (
+              <div key={item}>
+                <button
+                  className={`button ${
+                    selectedRegion === item ? "active" : ""
+                  } burger`}
+                  onClick={() => sortContinent(item)}
+                >
+                  {item}
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className="subregions">
+            {selectedRegion !== "" &&
+              filteredRegions.map((subregion) => (
+                <button
+                  key={subregion}
+                  className={`button subregion ${
+                    selectedSubregion === subregion ? "active" : ""
+                  }`}
+                  onClick={() => sortSubregion(subregion)}
+                >
+                  {subregion}
+                </button>
+              ))}
+          </div>
+        </div>
+      </div>
+
       <Pagination
         countItems={countItems}
         totalItems={totalItems}
@@ -175,5 +213,4 @@ function Home() {
     </>
   );
 }
-
 export default Home;

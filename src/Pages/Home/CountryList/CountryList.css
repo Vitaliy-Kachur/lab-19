@@ -4,7 +4,7 @@
   justify-content: space-between;
 }
 .country-list {
-  width: 35%;
+  width: 47%;
 }
 .country-list2 {
   width: 40%;
@@ -24,7 +24,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height: 55px;
+  height: 53px;
   width: 100%;
 }
 .item-left {
