@@ -17,7 +17,7 @@ function CountryDetails() {
       })
       .catch((error) => {});
     axios
-      .get("https://restcountries.com/v3.1/all")
+      .get("С")
       .then((response) => {
         setAllCountries(response.data);
       })
@@ -98,7 +98,7 @@ function CountryDetails() {
               </div>
             )}
             {countryData.tld && (
-              <div className="region-details">Td: {countryData.tld}</div>
+              <div className="region-details">Tld: {countryData.tld}</div>
             )}
             {countryData.name.official && (
               <div className="region-details">
@@ -108,6 +108,27 @@ function CountryDetails() {
             {countryData.flag && (
               <div className="region-details">Flag: {countryData.flag}</div>
             )}
+            {countryData.landlocked !== undefined && (
+              <div className="region-details">
+                Landlocked: {countryData.landlocked ? "true" : "false"}
+              </div>
+            )}
+              {countryData.independent !== undefined && (
+              <div className="region-details">
+                Independent: {countryData.independent ? "true" : "false"}
+              </div>
+            )}
+            {countryData.unMember !== undefined && (
+              <div className="region-details">
+                UnMember: {countryData.unMember ? "true" : "false"}
+              </div>
+            )}
+             {countryData.timezones && (
+              <div className="region-details">
+                Timezones: {countryData.timezones}
+              </div>
+            )}
+            
           </div>
           <div className="details-container-gerb">
             <img
@@ -125,5 +146,7 @@ function CountryDetails() {
     </div>
   );
 }
+
 export default CountryDetails;
+
 
