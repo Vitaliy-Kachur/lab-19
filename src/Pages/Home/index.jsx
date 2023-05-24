@@ -1,11 +1,11 @@
-import "./Home.css";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import CountryList from "./CountryList";
 import Pagination from "../../components/Pagination";
 import SearchBar from "../../components/SearchBar";
 import { slide as Menu } from "react-burger-menu";
+import "./Home.css";
 
 function Home() {
   const [allCountry, setAllCountry] = useState([]);
@@ -62,9 +62,15 @@ function Home() {
         selectedSubregion === "" ||
         country.subregion.includes(selectedSubregion)
     ).length;
+
   const paginate = (pageNumber) => {
     sessionStorage.setItem("currentPage", pageNumber);
     setCurrentPage(pageNumber);
+  };
+
+  const handleSearchTermChange = (newSearchTerm) => {
+    setSearchTerm(newSearchTerm);
+    setCurrentPage(1);
   };
 
   const sortAlphabetically = () => {
@@ -147,70 +153,84 @@ function Home() {
     };
     fetchData();
   }, []);
+
   useEffect(() => {
     sessionStorage.setItem("currentPage", currentPage);
   }, [currentPage]);
 
   if (allCountry.length === 0) return <div>Loading....</div>;
+
   return (
     <>
-      <div className="blok">
-        <button className="button burger2" onClick={sortAlphabetically}>
-          Sort A-Ua
-        </button>
-        <button className="button burger2" onClick={sortById}>
-          Sort ID
-        </button>
-        <button className="button burger2" onClick={resetSort}>
-          Reset sort
-        </button>
-        <div className="start">
-          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        </div>
-      </div>
-      <div className="blok2">
-        <div className="rozmir-blok">
-          <CountryList allCountry={currentCountry}></CountryList>
-        </div>
-        <div className="vidobrazutu">
-          <div className="top">
-            {Object.keys(regions).map((item) => (
-              <div key={item}>
-                <button
-                  className={`button ${
-                    selectedRegion === item ? "active" : ""
-                  } burger`}
-                  onClick={() => sortContinent(item)}
-                >
-                  {item}
-                </button>
+      <div className="content">
+        <div>
+          <div className="blok">
+            <button className="button burger2" onClick={sortAlphabetically}>
+              Sort A-Ua
+            </button>
+            <button className="button burger2" onClick={sortById}>
+              Sort ID
+            </button>
+            <button className="button burger2" onClick={resetSort}>
+              Reset sort
+            </button>
+            <div className="start">
+              <SearchBar
+                searchTerm={searchTerm}
+                setSearchTerm={handleSearchTermChange}
+              />
+            </div>
+          </div>
+          <div className="blok2">
+            <div className="rozmir-blok">
+              <CountryList allCountry={currentCountry}></CountryList>
+            </div>
+            <div className="vidobrazutu">
+              <div className="top">
+                {Object.keys(regions).map((item) => (
+                  <div key={item}>
+                    <button
+                      className={`button ${
+                        selectedRegion === item ? "active" : ""
+                      } burger`}
+                      onClick={() => sortContinent(item)}
+                    >
+                      {item}
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="subregions">
-            {selectedRegion !== "" &&
-              filteredRegions.map((subregion) => (
-                <button
-                  key={subregion}
-                  className={`button subregion ${
-                    selectedSubregion === subregion ? "active" : ""
-                  }`}
-                  onClick={() => sortSubregion(subregion)}
-                >
-                  {subregion}
-                </button>
-              ))}
+              {selectedRegion !== "Antarctica" && (
+                <div className="subregions">
+                  {selectedRegion !== "" &&
+                    filteredRegions.map((subregion) => (
+                      <button
+                        key={subregion}
+                        className={`button subregion ${
+                          selectedSubregion === subregion ? "active" : ""
+                        }`}
+                        onClick={() => sortSubregion(subregion)}
+                      >
+                        {subregion}
+                      </button>
+                    ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <Pagination
-        countItems={countItems}
-        totalItems={totalItems}
-        paginate={paginate}
-        currentPage={currentPage}
-      />
+        <div>
+          <Pagination
+            countItems={countItems}
+            totalItems={totalItems}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
+        </div>
+      </div>
     </>
   );
 }
+
 export default Home;

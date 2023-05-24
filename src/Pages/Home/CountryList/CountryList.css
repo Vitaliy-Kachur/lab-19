@@ -27,6 +27,7 @@
   height: 52px;
   width: 100%;
 }
+
 .item-left {
   display: flex;
   justify-content: space-between;
@@ -48,4 +49,7 @@
 }
 .white {
   color: white;
+}
+.country-item:hover {
+  background-color: #055b12;
 }

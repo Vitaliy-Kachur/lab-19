@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "./CountryList.css";
 
 function CountryList({ allCountry }) {
@@ -7,6 +8,17 @@ function CountryList({ allCountry }) {
   const [selectedCountryName, setSelectedCountryName] = useState(null);
 
   if (allCountry.length === 0) return <div>Loading....</div>;
+
+  const getCountryData = async (countryName) => {
+    try {
+      const response = await axios.get(
+        `https://restcountries.com/v3.1/name/${countryName}`
+      );
+      return response.data[0];
+    } catch (error) {
+      return null;
+    }
+  };
 
   return (
     <div className="country">
@@ -19,11 +31,25 @@ function CountryList({ allCountry }) {
           >
             <div
               className="country-item"
-              onMouseEnter={() => {
-                setSelectedCountryCoat(item.coatOfArms && item.coatOfArms.svg);
-                setSelectedCountryName(item.name.common);
+              onMouseEnter={async () => {
+                if (item.name.common === "Russia") {
+                  setSelectedCountryCoat(null);
+                  setSelectedCountryName("Russia");
+                } else {
+                  const countryData = await getCountryData(item.name.common);
+                  setSelectedCountryCoat(
+                    countryData?.coatOfArms?.svg ||
+                      item.flags?.svg ||
+                      item.coatOfArms?.png ||
+                      item.coatOfArms?.emojione
+                  );
+                  setSelectedCountryName(item.name.common);
+                }
               }}
-              onMouseLeave={() => setSelectedCountryCoat(null)}
+              onMouseLeave={() => {
+                setSelectedCountryCoat(null);
+                setSelectedCountryName(null);
+              }}
             >
               <div className="item-left">
                 <div className="index">{item.id}</div>
@@ -42,30 +68,38 @@ function CountryList({ allCountry }) {
         <div className="country-list2">
           <img className="coat-of-arms" src={selectedCountryCoat} alt="" />
           <div className="region white">
-            Region:
+            Region:{" "}
             {
               allCountry.find(
-                (item) => item.coatOfArms?.svg === selectedCountryCoat
+                (item) =>
+                  item.coatOfArms?.svg === selectedCountryCoat ||
+                  item.flags?.svg === selectedCountryCoat
               )?.region
             }
           </div>
           <div className="region white">
-            Subregion:
+            Subregion:{" "}
             {
               allCountry.find(
-                (item) => item.coatOfArms?.svg === selectedCountryCoat
+                (item) =>
+                  item.coatOfArms?.svg === selectedCountryCoat ||
+                  item.flags?.svg === selectedCountryCoat
               )?.subregion
             }
           </div>
           <div className="languages white">
             {allCountry.find(
-              (item) => item.coatOfArms?.svg === selectedCountryCoat
+              (item) =>
+                item.coatOfArms?.svg === selectedCountryCoat ||
+                item.flags?.svg === selectedCountryCoat
             )?.languages && (
               <>
                 <span>Languages: </span>
                 {Object.values(
                   allCountry.find(
-                    (item) => item.coatOfArms?.svg === selectedCountryCoat
+                    (item) =>
+                      item.coatOfArms?.svg === selectedCountryCoat ||
+                      item.flags?.svg === selectedCountryCoat
                   ).languages
                 ).join(", ")}
               </>
@@ -75,7 +109,9 @@ function CountryList({ allCountry }) {
             Population:{" "}
             {
               allCountry.find(
-                (item) => item.coatOfArms?.svg === selectedCountryCoat
+                (item) =>
+                  item.coatOfArms?.svg === selectedCountryCoat ||
+                  item.flags?.svg === selectedCountryCoat
               )?.population
             }
           </div>
@@ -86,3 +122,5 @@ function CountryList({ allCountry }) {
 }
 
 export default CountryList;
+
+

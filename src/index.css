@@ -12,10 +12,12 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
    background-color: rgb(3, 3, 40);
+   height: 100%;
 }
 
 a {
   font-weight: 500;
+  font-size: 20px;
   color: #646cff;
   text-decoration: inherit;
 }
@@ -24,6 +26,7 @@ a:hover {
 }
 
 body {
+  height: 93%;
  margin: 2%;
  background-color: rgb(3, 3, 40);
 }

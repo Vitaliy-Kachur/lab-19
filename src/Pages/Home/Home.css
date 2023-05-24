@@ -80,3 +80,10 @@
   width: 79px;
   height: 40px;
 }
+.content{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

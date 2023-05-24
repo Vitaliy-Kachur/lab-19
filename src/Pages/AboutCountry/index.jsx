@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AboutCountry.css";
+
+import CountryMap from "../../components/CountryMap";
 
 function CountryDetails() {
   const { name } = useParams();
   const [countryData, setCountryData] = useState(null);
   const [allCountries, setAllCountries] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -17,13 +19,6 @@ function CountryDetails() {
       })
       .catch((error) => {});
     axios
-      .get("С")
-      .then((response) => {
-        setAllCountries(response.data);
-      })
-      .catch((error) => {});
-
-    axios
       .get("https://restcountries.com/v3.1/all")
       .then((response) => {
         setAllCountries(response.data);
@@ -31,18 +26,29 @@ function CountryDetails() {
       .catch((error) => {});
   }, [name]);
 
+  const handleMapButtonClick = () => {
+    navigate(`/country/${name}/mapa`);
+  };
+
+  if (countryData && countryData.name.common === "Russia") {
+    return <div>Дані не знайдено</div>;
+  }
+
   return (
     <div className="about">
       <Link to="/">Back to Home</Link>
       {countryData && allCountries ? (
         <div className="flex">
-          <div>
+          <div className="width">
             <div className="country-details">{countryData.name.common}</div>
             <img
               className="img-details"
               src={countryData.flags.svg}
               alt={countryData.name.common}
             />
+            {countryData && (
+              <CountryMap countryName={countryData.name.common} />
+            )}
           </div>
           <div className="details-container">
             {countryData.region && (
@@ -63,17 +69,13 @@ function CountryDetails() {
             )}
             {countryData.altSpellings && (
               <div className="region-details">
-                AltSpellings: {countryData.altSpellings}
+                AltSpellings:{" "}
+                {Object.values(countryData.altSpellings).join(", ")}
               </div>
             )}
             {countryData.languages && (
               <div className="region-details">
                 Languages: {Object.values(countryData.languages).join(", ")}
-              </div>
-            )}
-            {countryData.borders && (
-              <div className="region-details">
-                Borders: {countryData.borders.join(", ")}
               </div>
             )}
             {countryData.area && (
@@ -113,7 +115,7 @@ function CountryDetails() {
                 Landlocked: {countryData.landlocked ? "true" : "false"}
               </div>
             )}
-              {countryData.independent !== undefined && (
+            {countryData.independent !== undefined && (
               <div className="region-details">
                 Independent: {countryData.independent ? "true" : "false"}
               </div>
@@ -123,12 +125,19 @@ function CountryDetails() {
                 UnMember: {countryData.unMember ? "true" : "false"}
               </div>
             )}
-             {countryData.timezones && (
+            {countryData.timezones && (
               <div className="region-details">
                 Timezones: {countryData.timezones}
               </div>
             )}
-            
+            {countryData.currencies && (
+              <div className="region-details">
+                Currencies:{" "}
+                {Object.values(countryData.currencies)
+                  .map((currency) => `${currency.name} (${currency.symbol})`)
+                  .join(", ")}
+              </div>
+            )}
           </div>
           <div className="details-container-gerb">
             <img
@@ -136,6 +145,26 @@ function CountryDetails() {
               src={countryData.coatOfArms.svg}
               alt={countryData.coatOfArms}
             />
+            {countryData.borders && (
+              <div className="region-details2">
+                Borders:{" "}
+                {countryData.borders
+                  .map((border) => {
+                    const borderCountry = allCountries.find(
+                      (country) => country.cca3 === border
+                    );
+                    return (
+                      <Link
+                        to={`/country/${borderCountry.name.common}`}
+                        key={border}
+                      >
+                        {borderCountry.name.common}
+                      </Link>
+                    );
+                  })
+                  .reduce((prev, curr) => [prev, ", ", curr])}
+              </div>
+            )}
           </div>
         </div>
       ) : countryData === null ? (
@@ -148,5 +177,4 @@ function CountryDetails() {
 }
 
 export default CountryDetails;
-
 

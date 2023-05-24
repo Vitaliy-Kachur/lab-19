@@ -17,6 +17,9 @@
     justify-content: start;
     flex-direction: column;
     width: 40%;
+    background-color: rgb(4, 37, 37);
+    border-radius: 10px;
+    border: 2px solid rgb(12, 64, 14);
 }
 .details-container
 {
@@ -24,6 +27,7 @@
     color: white;
     font-size: 20px;
 }
+
 .img-details2{
     width:  90%;
     height: auto;
@@ -36,5 +40,15 @@
     margin: 1%;
 }
 .region-details{
-    color: aqua;
+    color: white;
+    border: 1px solid rgb(12, 64, 14);
+}
+.region-details2{
+    margin-top: 20%;
+    font-size: 20px;
+    color: white;
+    border: 1px solid rgb(12, 64, 14);
+}
+.width{
+    width: 30%;
 }
