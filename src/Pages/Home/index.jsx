@@ -4,10 +4,14 @@ import { Link } from "react-router-dom";
 import CountryList from "./CountryList";
 import Pagination from "../../components/Pagination";
 import SearchBar from "../../components/SearchBar";
-import { slide as Menu } from "react-burger-menu";
+// import { slide as Menu } from "react-burger-menu";
+import { useLocation } from "react-router-dom";
 import "./Home.css";
 
 function Home() {
+  const location = useLocation();
+  const selectedLanguage = new URLSearchParams(location.search).get("language");
+
   const [allCountry, setAllCountry] = useState([]);
   const [currentPage, setCurrentPage] = useState(
     Number(sessionStorage.getItem("currentPage")) || 1
@@ -18,7 +22,6 @@ function Home() {
   const [selectedSubregion, setSelectedSubregion] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
   const [filteredRegions, setFilteredRegions] = useState([]);
-
   const [isAscendingSort, setIsAscendingSort] = useState(
     sessionStorage.getItem("isAscendingSort") === "true" || true
   );
@@ -140,7 +143,10 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios("https://restcountries.com/v3.1/all");
+        const url = selectedLanguage
+          ? `https://restcountries.com/v3.1/lang/${selectedLanguage}`
+          : `https://restcountries.com/v3.1/all`;
+        const result = await axios(url);
         const resultAddId = result.data.map((item, ind) => {
           return { ...item, id: ind + 1 };
         });
@@ -152,8 +158,9 @@ function Home() {
       }
     };
     fetchData();
-  }, []);
-
+  }, [selectedLanguage]);
+  
+ 
   useEffect(() => {
     sessionStorage.setItem("currentPage", currentPage);
   }, [currentPage]);
@@ -183,7 +190,7 @@ function Home() {
           </div>
           <div className="blok2">
             <div className="rozmir-blok">
-              <CountryList allCountry={currentCountry}></CountryList>
+              <CountryList allCountry={currentCountry} />
             </div>
             <div className="vidobrazutu">
               <div className="top">

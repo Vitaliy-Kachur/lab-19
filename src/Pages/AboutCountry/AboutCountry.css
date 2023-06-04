@@ -52,3 +52,7 @@
 .width{
     width: 30%;
 }
+.strong{
+    color: blue;
+    cursor: pointer;
+}

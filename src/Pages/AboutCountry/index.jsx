@@ -10,6 +10,7 @@ function CountryDetails() {
   const [countryData, setCountryData] = useState(null);
   const [allCountries, setAllCountries] = useState(null);
   const navigate = useNavigate();
+  const [selectedLanguage, setSelectedLanguage] = useState("");
 
   useEffect(() => {
     axios
@@ -26,8 +27,8 @@ function CountryDetails() {
       .catch((error) => {});
   }, [name]);
 
-  const handleMapButtonClick = () => {
-    navigate(`/country/${name}/mapa`);
+  const handleLanguageClick = (language) => {
+    navigate(`/home?language=${language}`);
   };
 
   if (countryData && countryData.name.common === "Russia") {
@@ -50,6 +51,7 @@ function CountryDetails() {
               <CountryMap countryName={countryData.name.common} />
             )}
           </div>
+         
           <div className="details-container">
             {countryData.region && (
               <div className="region-details">Region: {countryData.region}</div>
@@ -71,11 +73,6 @@ function CountryDetails() {
               <div className="region-details">
                 AltSpellings:{" "}
                 {Object.values(countryData.altSpellings).join(", ")}
-              </div>
-            )}
-            {countryData.languages && (
-              <div className="region-details">
-                Languages: {Object.values(countryData.languages).join(", ")}
               </div>
             )}
             {countryData.area && (
@@ -140,7 +137,7 @@ function CountryDetails() {
             )}
           </div>
           <div className="details-container-gerb">
-            <img
+          <img
               className="img-details2"
               src={countryData.coatOfArms.svg}
               alt={countryData.coatOfArms}
@@ -154,7 +151,7 @@ function CountryDetails() {
                       (country) => country.cca3 === border
                     );
                     return (
-                      <Link
+                      <Link  className="strong"
                         to={`/country/${borderCountry.name.common}`}
                         key={border}
                       >
@@ -163,6 +160,21 @@ function CountryDetails() {
                     );
                   })
                   .reduce((prev, curr) => [prev, ", ", curr])}
+              </div>
+            )}
+            {countryData.languages && (
+              <div className="region-details2">
+                Languages: 
+                {Object.values(countryData.languages).map((language) => (
+                  <strong className="strong"
+                    onClick={() => handleLanguageClick(language)}
+                    key={language}
+                  >
+                    {language}
+                  </strong>
+                ))
+                .reduce((prev, curr) => [prev, ", ", curr])
+                }
               </div>
             )}
           </div>
