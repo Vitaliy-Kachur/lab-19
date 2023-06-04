@@ -1,58 +1,80 @@
-/* @import "leaflet/dist/leaflet.css"; */
-.img-details{
-    margin-top: 2%;
-    width:  90%;
-    height: auto;
+.img-details {
+  margin-top: 2%;
+  width: 90%;
+  height: auto;
 }
-.country-details{
-    color: white;
-    font-size: 40px;
+.country-details {
+  color: white;
+  font-size: 40px;
 }
-.flex{
-    display: flex;
-    justify-content: space-between;
+.butto {
+  color: rgb(52, 10, 137);
+  background-color: rgb(159, 157, 204);
+  width: 100px;
+  height: 25px;
+  font-size: 15px;
+  cursor: pointer;
+  /* margin: 2%; */
+  margin-left: 2%;
+  margin-right: 2%;
+  display: flex;
+  justify-content: center;
 }
-.details-container{
-    display: flex;
-    justify-content: start;
-    flex-direction: column;
-    width: 40%;
-    background-color: rgb(4, 37, 37);
-    border-radius: 10px;
-    border: 2px solid rgb(12, 64, 14);
+.flex {
+  display: flex;
+  justify-content: space-between;
 }
-.details-container
-{
-    margin: 2%;
-    color: white;
-    font-size: 20px;
+.flex1 {
+  display: flex;
+  justify-content: center;
+  height: 40px;
+}
+.details-container {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  background-color: rgb(14 10 119 / 23%);
+  border-radius: 10px;
+  border: 2px solid rgb(8 197 15);
+}
+.butto.active {
+  background-color: green;
+  color: white;
+}
+.details-container {
+  margin-left: 2%;
+  margin-right: 2%;
+  color: white;
+  font-size: 20px;
 }
 
-.img-details2{
-    width:  90%;
-    height: auto;
+.img-details2 {
+  width: 90%;
+  height: auto;
 }
-.details-container-gerb{
-    margin-top: 2%;
-    width: 20%;
+.details-container-gerb {
+  margin-top: 2%;
+  width: 20%;
 }
-.about{
-    margin: 1%;
+
+.region-details {
+  color: white;
+  border: 1px solid rgb(46 180 143);
 }
-.region-details{
-    color: white;
-    border: 1px solid rgb(12, 64, 14);
+.region-details2 {
+  margin-top: 20%;
+  font-size: 20px;
+  color: white;
+  border: 1px solid rgb(12, 64, 14);
 }
-.region-details2{
-    margin-top: 20%;
-    font-size: 20px;
-    color: white;
-    border: 1px solid rgb(12, 64, 14);
+.width {
+  width: 30%;
 }
-.width{
-    width: 30%;
+.strong {
+  color: blue;
+  cursor: pointer;
 }
-.strong{
-    color: blue;
-    cursor: pointer;
+.width2 {
+  margin: 1%;
+  width: 50%;
 }

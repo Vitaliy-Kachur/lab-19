@@ -9,8 +9,8 @@ function CountryMap({ countryName }) {
         className="country-map"
         title="Country Map"
         src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBcbQOenBrouiGdjYHHIpHvAD9Lzxn3K84&q=${countryName}`}
-        width="100%"
-        height="250px"
+        width="99.4%"
+        height="500px"
         allowFullScreen
       ></iframe>
     </div>
