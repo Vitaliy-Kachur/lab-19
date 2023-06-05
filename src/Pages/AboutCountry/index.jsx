@@ -10,7 +10,6 @@ function CountryDetails() {
   const [countryData, setCountryData] = useState(null);
   const [allCountries, setAllCountries] = useState(null);
   const navigate = useNavigate();
-  const [selectedLanguage, setSelectedLanguage] = useState("");
   const [displayMap, setDisplayMap] = useState(false);
   const [activeButton, setActiveButton] = useState("details");
 
@@ -49,17 +48,27 @@ function CountryDetails() {
 
   return (
     <div className="about">
-      <Link to="/">Back to Home</Link>
+      <Link className="strong2" to="/">
+        Back to Home
+      </Link>
       {countryData && allCountries ? (
         <div className="flex">
-          <div className="width">
+          <div className="flex2">
             <div className="country-details">{countryData.name.common}</div>
-            <img
-              className="img-details"
-              src={countryData.flags.svg}
-              alt={countryData.name.common}
-            />
+            <div className="flex3">
+              <img
+                className="img-details"
+                src={countryData.flags.svg}
+                alt={countryData.name.common}
+              />
+              <img
+                className="img-details2"
+                src={countryData.coatOfArms.svg}
+                alt={countryData.coatOfArms}
+              />
+            </div>
           </div>
+
           <div className="width2">
             <div className="flex1">
               <div
@@ -163,7 +172,8 @@ function CountryDetails() {
                   )}
                   {countryData.timezones && (
                     <div className="region-details">
-                      Timezones: {Object.values(countryData.timezones).join(", ")} 
+                      Timezones:{" "}
+                      {Object.values(countryData.timezones).join(", ")}
                     </div>
                   )}
                   {countryData.currencies && (
@@ -182,13 +192,6 @@ function CountryDetails() {
           </div>
 
           <div className="details-container-gerb">
-            {countryData.coatOfArms && (
-              <img
-                className="img-details2"
-                src={countryData.coatOfArms.svg}
-                alt={countryData.coatOfArms}
-              />
-            )}
             {countryData.borders && (
               <div className="region-details2">
                 Borders:{" "}

@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import CountryList from "./CountryList";
 import Pagination from "../../components/Pagination";
 import SearchBar from "../../components/SearchBar";
-// import { slide as Menu } from "react-burger-menu";
 import { useLocation } from "react-router-dom";
 import "./Home.css";
 
 function Home() {
   const location = useLocation();
   const selectedLanguage = new URLSearchParams(location.search).get("language");
-
   const [allCountry, setAllCountry] = useState([]);
   const [currentPage, setCurrentPage] = useState(
     Number(sessionStorage.getItem("currentPage")) || 1
   );
   const [countItems, setCountItems] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [Save, getSave] = useState([]);
   const [selectedSubregion, setSelectedSubregion] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
   const [filteredRegions, setFilteredRegions] = useState([]);
@@ -159,8 +155,7 @@ function Home() {
     };
     fetchData();
   }, [selectedLanguage]);
-  
- 
+
   useEffect(() => {
     sessionStorage.setItem("currentPage", currentPage);
   }, [currentPage]);
@@ -172,6 +167,7 @@ function Home() {
       <div className="content">
         <div>
           <div className="blok">
+            <div className="vids">
             <button className="button burger2" onClick={sortAlphabetically}>
               Sort A-Ua
             </button>
@@ -181,6 +177,7 @@ function Home() {
             <button className="button burger2" onClick={resetSort}>
               Reset sort
             </button>
+            </div>
             <div className="start">
               <SearchBar
                 searchTerm={searchTerm}
@@ -199,7 +196,7 @@ function Home() {
                     <button
                       className={`button ${
                         selectedRegion === item ? "active" : ""
-                      } burger`}
+                      } burger roz`}
                       onClick={() => sortContinent(item)}
                     >
                       {item}
@@ -226,7 +223,6 @@ function Home() {
             </div>
           </div>
         </div>
-
         <div>
           <Pagination
             countItems={countItems}

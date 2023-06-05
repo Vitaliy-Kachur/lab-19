@@ -3,3 +3,10 @@
     height: 30px;
     border-radius: 20px;
 }
+@media(max-width:680px)
+{
+    .pochuk{
+        width: 50%;
+        height: 24px;
+    }
+}

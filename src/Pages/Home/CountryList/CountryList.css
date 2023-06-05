@@ -53,3 +53,62 @@
 .country-item:hover {
   background-color: #055b12;
 }
+.text{
+  display: flex;
+}
+.item-right{
+  display: flex;
+}
+@media(max-width:1100px)
+{
+  .country-list{
+    width: 75%;
+  }
+   .country-item {
+    pointer-events: none;
+    cursor: default;
+  }
+}
+@media(max-width:1400px)
+{
+  a{
+    font-size: 15px;
+  }
+}
+@media(max-width:936px)
+{
+  .country-list{
+    width: 85%;
+  }
+}
+@media(max-width:680px)
+{
+  .country-list{
+    margin-left: 4%;
+    margin-right: 4%;
+    width: 100%;
+  }
+  .country-item {
+    height: 30px;
+  }
+  .item-left img {
+    width: 25px;
+    height: 15px;
+  }
+  a{
+    font-size: 12px;
+  }
+  .item-left {
+    width: auto;
+    margin-left: 2%;
+  }
+  .item-left img {
+    margin-left: 30%;
+  }
+}
+@media(max-width:360px)
+{
+  a{
+    font-size: 9px;
+  }
+}

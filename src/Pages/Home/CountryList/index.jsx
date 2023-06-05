@@ -57,7 +57,7 @@ function CountryList({ allCountry }) {
               </div>
               <div className="item-right">
                 <div className="country-info">
-                  <div>{item.name.common}</div>
+                  <div className="text">{item.name.common}</div>
                 </div>
               </div>
             </div>
